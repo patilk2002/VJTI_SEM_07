@@ -1,0 +1,25 @@
+create schema Patient; 
+
+create table admission (admitID int PRIMARY KEY, patientID int, doctorID int, billNo int, bedNo int, entryDate date, exitDate date);	
+
+show databases;
+
+CREATE TABLE `patient`.`patient` (`patientID` INT NOT NULL, `insuranceID` INT NULL,`patientName` VARCHAR(45) NULL, `dob` DATE NULL,`phoneNo` VARCHAR(45) NULL,`gender` VARCHAR(45) NULL,`address` VARCHAR(45) NULL, PRIMARY KEY (`patientID`));
+
+CREATE TABLE `patient`.`doctor` (`doctorID` INT NOT NULL,`docName` VARCHAR(45) NULL,`degree` VARCHAR(45) NULL,`phoneNo` VARCHAR(45) NULL,`address` VARCHAR(45) NULL,`dob` DATE NULL,`joiningDate` DATE NULL,`gender` VARCHAR(45) NULL, PRIMARY KEY (`doctorID`));
+
+
+CREATE TABLE `patient`.`bill` (`billNo` INT NOT NULL,`admitID` INT NULL,`insuranceID` INT NULL,`totalAmount` INT NULL,`AmtPaid` INT NULL,`AmtPending` INT NULL,`paymentMode` VARCHAR(45) NULL,`Insured` TINYINT NULL, PRIMARY KEY (`billNo`)) COMMENT = '     ';
+
+
+CREATE TABLE `patient`.`bed` (`bedNo` INT NOT NULL,`wardID` INT NULL,`wardName` VARCHAR(45) NULL,`floor` INT NULL,`roomType` VARCHAR(45) NULL,`roomNo` INT NULL, PRIMARY KEY (`bedNo`));
+
+Adding foreight key constraints to each table:
+
+ALTER TABLE `patient`.`admission`ADD INDEX `patient_idx` (`patientID` ASC) VISIBLE, ADD INDEX `bed_idx` (`bedNo` ASC) VISIBLE, ADD INDEX `bill_idx` (`billNo` ASC) VISIBLE,ADD INDEX `doctorAss_idx` (`doctorID` ASC) VISIBLE;; ALTER TABLE `patient`.`admission` ADD CONSTRAINT `patient` FOREIGN KEY (`patientID`)REFERENCES `patient`.`patient` (`patientID`), ADD CONSTRAINT `bed` FOREIGN KEY (`bedNo`)REFERENCES `patient`.`bed` (`bedNo`), ADD CONSTRAINT `bill` FOREIGN KEY (`billNo`) REFERENCES `patient`.`bill` (`billNo`), ADD CONSTRAINT `doctorAss` FOREIGN KEY (`doctorID`) REFERENCES `patient`.`doctor` (`doctorID`);
+
+
+SELECT constraint_name, table_name, referenced_table_name
+FROM information_schema.referential_constraints
+WHERE constraint_schema = 'patient';
+
